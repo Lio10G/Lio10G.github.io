@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CodeCoach – spielerisch Programmieren lernen. Ein HTL-Projekt der 3BHIF an der HTL Perg.">
+  <meta name="theme-color" content="#11142b">
+  <title>CodeCoach – Lernen. Üben. Besser werden.</title>
+  <style>
+    :root {
+      --bg: #0c1022;
+      --surface: #151a32;
+      --surface-light: #1c2342;
+      --text: #f5f6ff;
+      --muted: #aab1ce;
+      --accent: #6d7cff;
+      --accent-2: #a16bff;
+      --line: rgba(255,255,255,.10);
+      --radius: 22px;
+      --max-width: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 85% 5%, rgba(109,124,255,.18), transparent 28rem),
+        radial-gradient(circle at 5% 35%, rgba(161,107,255,.12), transparent 25rem),
+        var(--bg);
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--max-width), calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(12,16,34,.82); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 1.15rem; font-weight: 850; letter-spacing: -.04em; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px;
+      color: white; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 24px rgba(109,124,255,.25);
+    }
+    .nav-links { display: flex; align-items: center; gap: 24px; color: var(--muted); font-size: .92rem; }
+    .nav-links a:hover, .footer-links a:hover { color: white; }
+    .menu-button { display: none; border: 1px solid var(--line); background: var(--surface); color: white; border-radius: 10px; padding: 9px 12px; font: inherit; }
+    .hero { padding: 112px 0 92px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; color: #c4caff;
+      border: 1px solid rgba(139,150,255,.28); background: rgba(109,124,255,.09);
+      border-radius: 999px; padding: 7px 13px; font-size: .82rem; font-weight: 650;
+    }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #8d98ff; }
+    h1 { font-size: clamp(3rem, 8vw, 6.4rem); line-height: .98; letter-spacing: -.075em; margin: 25px 0 18px; }
+    .gradient-text { background: linear-gradient(100deg, #fff 15%, #9da8ff 55%, #c49bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { max-width: 690px; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); margin: 0; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 19px; border-radius: 12px; font-weight: 700; transition: transform .2s, background .2s; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: linear-gradient(110deg, var(--accent), var(--accent-2)); color: white; box-shadow: 0 12px 30px rgba(109,124,255,.22); }
+    .button-secondary { border: 1px solid var(--line); background: rgba(255,255,255,.035); color: var(--text); }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 52px; }
+    .meta-chip { border: 1px solid var(--line); background: rgba(255,255,255,.035); padding: 9px 13px; border-radius: 11px; color: var(--muted); font-size: .88rem; }
+    section { padding: 78px 0; }
+    .section-heading { max-width: 720px; margin-bottom: 34px; }
+    .section-kicker { color: #aab4ff; text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; font-weight: 800; }
+    h2 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; letter-spacing: -.055em; margin: 10px 0 13px; }
+    .section-heading p, .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .card {
+      border: 1px solid var(--line); background: linear-gradient(145deg, rgba(28,35,66,.92), rgba(21,26,50,.92));
+      border-radius: var(--radius); padding: 25px; min-height: 210px;
+    }
+    .card-icon {
+      width: 43px; height: 43px; display: grid; place-items: center; border-radius: 13px;
+      background: rgba(125,139,255,.13); color: #b7beff; font-size: 1.25rem; margin-bottom: 20px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 1.12rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    .feature-list { display: grid; gap: 15px; }
+    .feature { display: flex; gap: 14px; align-items: flex-start; }
+    .check { flex: 0 0 27px; height: 27px; display: grid; place-items: center; border-radius: 9px; background: rgba(109,124,255,.16); color: #b9c0ff; font-weight: 900; }
+    .feature strong { display: block; margin-bottom: 2px; }
+    .feature span:last-child { color: var(--muted); font-size: .94rem; }
+    .highlight-panel {
+      padding: 32px; border-radius: 26px; border: 1px solid rgba(151,160,255,.2);
+      background: radial-gradient(circle at 90% 10%, rgba(161,107,255,.19), transparent 16rem), var(--surface);
+    }
+    .highlight-panel .big { font-size: 2.4rem; font-weight: 850; letter-spacing: -.06em; }
+    .highlight-panel p { color: var(--muted); margin-bottom: 0; }
+    .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .tech { padding: 22px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,255,255,.035); }
+    .tech strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
+    .tech span { color: var(--muted); font-size: .9rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .person { padding: 22px 15px; text-align: center; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.035); }
+    .avatar { width: 58px; height: 58px; margin: 0 auto 13px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(135deg, #5365dc, #9c68d9); font-size: 1.2rem; font-weight: 850; }
+    .person strong { display: block; }
+    .person span { color: var(--muted); font-size: .84rem; }
+    .project-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .info-box { padding: 20px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .info-box span { display: block; color: var(--muted); font-size: .82rem; margin-bottom: 5px; }
+    .info-box strong { font-size: .98rem; }
+    .status { display: inline-flex; align-items: center; gap: 8px; color: #c8caff; }
+    .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #a3aaff; }
+    .contact-panel { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 32px; border-radius: 24px; background: linear-gradient(110deg, rgba(89,105,225,.25), rgba(161,107,255,.15)); border: 1px solid rgba(151,160,255,.22); }
+    .contact-panel h2 { margin-top: 0; }
+    footer { border-top: 1px solid var(--line); padding: 30px 0; color: var(--muted); font-size: .88rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 20px; }
+    .imprint { max-width: 760px; }
+    .imprint p { color: var(--muted); }
+    @media (max-width: 800px) {
+      .nav-links { display: none; position: absolute; top: 76px; left: 0; right: 0; padding: 20px; flex-direction: column; align-items: flex-start; background: #11152b; border-bottom: 1px solid var(--line); }
+      .nav-links.open { display: flex; }
+      .menu-button { display: inline-block; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .split { grid-template-columns: 1fr; gap: 28px; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .container { width: min(100% - 28px, var(--max-width)); }
+      .hero { padding: 82px 0 65px; }
+      section { padding: 58px 0; }
+      .grid, .tech-grid, .project-info { grid-template-columns: 1fr; }
+      .contact-panel { align-items: flex-start; flex-direction: column; padding: 25px; }
+      .footer-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#start" aria-label="CodeCoach Startseite">
+        <span class="brand-mark">C</span>
+        <span>CodeCoach</span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Hauptnavigation">
+        <a href="#projekt">Projekt</a>
+        <a href="#funktionen">Funktionen</a>
+        <a href="#technologien">Technologien</a>
+        <a href="#team">Team</a>
+        <a href="#impressum">Impressum</a>
+      </nav>
+      <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="navLinks">Menü</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div class="container">
+        <span class="eyebrow">HTL-Perg-Projekt · 3BHIF · 2026/2027</span>
+        <h1><span class="gradient-text">CodeCoach</span></h1>
+        <p><strong>Lernen. Üben. Besser werden.</strong><br>
+          Entdecke die Welt des Programmierens: Mit CodeCoach soll Coding verständlich, interaktiv und spielerisch gelernt werden.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#projekt">Projekt entdecken <span aria-hidden="true">&nbsp;→</span></a>
+          <a class="button button-secondary" href="#funktionen">Funktionen ansehen</a>
+        </div>
+        <div class="hero-meta">
+          <span class="meta-chip">Spielerisch lernen</span>
+          <span class="meta-chip">Aufgaben lösen</span>
+          <span class="meta-chip">Fortschritt durch Streaks</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projekt">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Die Projektidee</span>
+          <h2>Programmieren lernen – Schritt für Schritt.</h2>
+          <p>CodeCoach ist eine geplante Lernplattform, die Schülerinnen und Schülern der HTL Perg das Erlernen von Coding auf eine abwechslungsreiche und motivierende Weise ermöglichen soll.</p>
+        </div>
+        <div class="split">
+          <div class="feature-list">
+            <div class="feature">
+              <span class="check">✓</span>
+              <div><strong>Die Herausforderung</strong><span>Der Einstieg ins Programmieren kann schwierig sein. Reine Theorie und lange Übungen wirken oft wenig motivierend.</span></div>
+            </div>
+            <div class="feature">
+              <span class="check">✓</span>
+              <div><strong>Unsere Idee</strong><span>Kurze, abwechslungsreiche Aufgaben machen das Lernen interaktiver und helfen dabei, Programmierkenntnisse regelmäßig zu trainieren.</span></div>
+            </div>
+            <div class="feature">
+              <span class="check">✓</span>
+              <div><strong>Unser Ziel</strong><span>Mit CodeCoach möchten wir das Üben einfacher und unterhaltsamer gestalten und Lernende zum regelmäßigen Programmieren motivieren.</span></div>
+            </div>
+          </div>
+          <div class="highlight-panel">
+            <span class="section-kicker">Unser Motto</span>
+            <div class="big">Lernen.<br>Üben.<br><span class="gradient-text">Besser werden.</span></div>
+            <p>Jede gelöste Aufgabe ist ein weiterer Schritt zu besseren Coding-Kenntnissen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funktionen">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Das Lernkonzept</span>
+          <h2>Wissen anwenden statt nur auswendig lernen.</h2>
+          <p>Die Aufgaben sollen unterschiedliche Lernmethoden kombinieren. So können Lernende ihr Wissen testen und selbst Code schreiben.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">⌨</div>
+            <h3>Code-Aufgaben</h3>
+            <p>Schreibe kleine Code-Beispiele direkt in der Plattform und wende dein Wissen praktisch an.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">✓</div>
+            <h3>Multiple Choice</h3>
+            <p>Beantworte Fragen zu Programmierkonzepten und überprüfe, ob du die Inhalte verstanden hast.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">✦</div>
+            <h3>KI-Überprüfung</h3>
+            <p>Eine KI soll selbst geschriebene Lösungen überprüfen und dabei helfen, Fehler und Verbesserungsmöglichkeiten zu erkennen.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">🔥</div>
+            <h3>Streaks</h3>
+            <p>Regelmäßiges Üben soll durch Streaks motiviert werden. Wer dranbleibt, kann seine Lernserie fortsetzen.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">◎</div>
+            <h3>Direktes Feedback</h3>
+            <p>Nach einer Aufgabe soll sichtbar werden, ob die Antwort richtig ist und wo noch Übungsbedarf besteht.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">↗</div>
+            <h3>Mit Spaß lernen</h3>
+            <p>Abwechslungsreiche Aufgaben sollen das Lernen auflockern und zum Ausprobieren motivieren.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ablauf">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">So funktioniert die Idee</span>
+          <h2>In wenigen Schritten zur Lösung.</h2>
+          <p>Der geplante Lernablauf verbindet kurze Wissensfragen mit praktischen Programmieraufgaben.</p>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <div class="card-icon">01</div>
+            <h3>Aufgabe auswählen</h3>
+            <p>Wähle eine Multiple-Choice-Frage oder eine Aufgabe, bei der du selbst Code schreiben musst.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">02</div>
+            <h3>Aufgabe bearbeiten</h3>
+            <p>Überlege dir eine Lösung und beantworte die Frage oder schreibe deinen eigenen Code.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">03</div>
+            <h3>Ergebnis überprüfen</h3>
+            <p>Die Antwort wird überprüft. Bei Code-Aufgaben soll die KI Rückmeldung zur Lösung geben.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="technologien">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Technische Umsetzung</span>
+          <h2>Die Technologien hinter CodeCoach.</h2>
+          <p>Für die Entwicklung unseres Projekts setzen wir auf ein Backend mit C#, ein TypeScript-Frontend und Firebase.</p>
+        </div>
+        <div class="tech-grid">
+          <div class="tech"><strong>C#</strong><span>Backend – serverseitige Logik und Verarbeitung</span></div>
+          <div class="tech"><strong>TypeScript</strong><span>Frontend – Benutzeroberfläche und Interaktionen</span></div>
+          <div class="tech"><strong>Firebase</strong><span>Backend-Dienst für die benötigte Daten- und Plattforminfrastruktur</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Das Team</span>
+          <h2>Gemeinsam entwickeln wir CodeCoach.</h2>
+          <p>Wir sind ein Projektteam der 3BHIF an der HTL Perg.</p>
+        </div>
+        <div class="team-grid">
+          <div class="person"><div class="avatar">LG</div><strong>Lionel Grabmann</strong><span>Projektteam</span></div>
+          <div class="person"><div class="avatar">BI</div><strong>Bulut Ibisler</strong><span>Projektteam</span></div>
+          <div class="person"><div class="avatar">AW</div><strong>Ahmad Wahbeh</strong><span>Projektteam</span></div>
+          <div class="person"><div class="avatar">UK</div><strong>Utku Keskinsoy</strong><span>Projektteam</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projektinfo">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Projektdaten</span>
+          <h2>CodeCoach an der HTL Perg.</h2>
+        </div>
+        <div class="project-info">
+          <div class="info-box"><span>Schule</span><strong>HTL Perg</strong></div>
+          <div class="info-box"><span>Klasse</span><strong>3BHIF</strong></div>
+          <div class="info-box"><span>Schuljahr</span><strong>2026/2027</strong></div>
+          <div class="info-box"><span>Betreuungslehrer</span><strong>Prof. Oppitz</strong></div>
+          <div class="info-box"><span>Projektstatus</span><strong class="status">Wird ergänzt</strong></div>
+          <div class="info-box"><span>Projektname</span><strong>CodeCoach</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <div class="container">
+        <div class="contact-panel">
+          <div>
+            <span class="section-kicker">Kontakt</span>
+            <h2>Fragen zu unserem Projekt?</h2>
+            <p class="muted">Schreib uns gerne eine E-Mail.</p>
+          </div>
+          <a class="button button-primary" href="mailto:20220031@students.htl-perg.ac.at">E-Mail schreiben&nbsp; →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="impressum">
+      <div class="container imprint">
+        <div class="section-heading">
+          <span class="section-kicker">Rechtliches</span>
+          <h2>Impressum</h2>
+          <p>Informationen über die Verantwortlichen dieser Projektwebsite.</p>
+        </div>
+        <h3>Medieninhaber und für den Inhalt verantwortlich</h3>
+        <p>
+          Lionel Grabmann<br>
+          Bulut Ibisler<br>
+          Ahmad Wahbeh<br>
+          Utku Keskinsoy
+        </p>
+        <h3>Projekt</h3>
+        <p>
+          CodeCoach – HTL-Perg-Projekt<br>
+          HTL Perg, 3BHIF<br>
+          Schuljahr 2026/2027<br>
+          Betreuungslehrer: Prof. Oppitz
+        </p>
+        <h3>Kontakt</h3>
+        <p><a href="mailto:20220031@students.htl-perg.ac.at">20220031@students.htl-perg.ac.at</a></p>
+        <h3>Anschrift</h3>
+        <p>[Anschrift bitte ergänzen]</p>
+        <p class="muted">Hinweis: Vor der Veröffentlichung müssen die fehlenden Angaben ergänzt und geprüft werden, welche gesetzlichen Impressums- und Offenlegungspflichten für eure konkrete Projektwebsite gelten.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 CodeCoach · HTL Perg · 3BHIF</span>
+      <div class="footer-links">
+        <a href="#start">Nach oben</a>
+        <a href="#impressum">Impressum</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const navLinks = document.getElementById("navLinks");
+
+    menuButton.addEventListener("click", function () {
+      const isOpen = navLinks.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", isOpen);
+    });
+
+    navLinks.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navLinks.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+  </script>
+</body>
+</html>
