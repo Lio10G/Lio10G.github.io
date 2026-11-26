@@ -100,7 +100,15 @@
     .tech span { color: var(--muted); font-size: .9rem; }
     .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .person { padding: 22px 15px; text-align: center; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.035); }
-    .avatar { width: 58px; height: 58px; margin: 0 auto 13px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(135deg, #5365dc, #9c68d9); font-size: 1.2rem; font-weight: 850; }
+    .avatar {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 3px solid #6d7cff;
+}
     .person strong { display: block; }
     .person span { color: var(--muted); font-size: .84rem; }
     .project-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -294,11 +302,32 @@
           <p>Wir sind ein Projektteam der 3BHIF an der HTL Perg.</p>
         </div>
         <div class="team-grid">
-          <div class="person"><div class="avatar">LG</div><strong>Lionel Grabmann</strong><span>Projektteam</span></div>
-          <div class="person"><div class="avatar">BI</div><strong>Bulut Ibisler</strong><span>Projektteam</span></div>
-          <div class="person"><div class="avatar">AW</div><strong>Ahmad Wahbeh</strong><span>Projektteam</span></div>
-          <div class="person"><div class="avatar">UK</div><strong>Utku Keskinsoy</strong><span>Projektteam</span></div>
-        </div>
+
+  <div class="person">
+    <img class="avatar" src="images/lionel.jpg" alt="Lionel Grabmann">
+    <strong>Lionel Grabmann</strong>
+    <span>Projektteam</span>
+  </div>
+
+  <div class="person">
+    <img class="avatar" src="images/bulut.jpg" alt="Bulut Ibisler">
+    <strong>Bulut Ibisler</strong>
+    <span>Projektteam</span>
+  </div>
+
+  <div class="person">
+    <img class="avatar" src="images/ahmad.jpg" alt="Ahmad Wahbeh">
+    <strong>Ahmad Wahbeh</strong>
+    <span>Projektteam</span>
+  </div>
+
+  <div class="person">
+    <img class="avatar" src="images/utku.jpg" alt="Utku Keskinsoy">
+    <strong>Utku Keskinsoy</strong>
+    <span>Projektteam</span>
+  </div>
+
+</div>
       </div>
     </section>
 
